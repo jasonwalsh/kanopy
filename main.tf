@@ -3,10 +3,16 @@ provider "kubernetes" {
   config_context = "kind-urban-disco"
 }
 
+// provider "kubernetes" {
+//   alias = "kanopy"
+// 
+//   host = "https://api.${local.environment}.corp.mongodb.com"
+// }
+
 provider "aws" {}
 
 locals {
-  environment = replace(terraform.workspace, "default", "production")
+  environment = replace(terraform.workspace, "default", "prod")
   tags        = { Name = random_id.this.hex }
 }
 
@@ -181,6 +187,8 @@ resource "aws_eip" "this" {
 }
 
 resource "kubernetes_service" "this" {
+  // provider = kubernetes.kanopy
+
   metadata {
     labels = {
       "app.kubernetes.io/name" = random_id.this.hex
@@ -200,6 +208,8 @@ resource "kubernetes_service" "this" {
 }
 
 resource "kubernetes_endpoints" "this" {
+  // provider = kubernetes.kanopy
+
   metadata {
     labels = {
       "app.kubernetes.io/name" = random_id.this.hex
@@ -221,6 +231,8 @@ resource "kubernetes_endpoints" "this" {
 }
 
 resource "kubernetes_manifest" "this" {
+  // provider = kubernetes.kanopy
+
   manifest = {
     apiVersion = "monitoring.coreos.com/v1"
     kind       = "ServiceMonitor"
